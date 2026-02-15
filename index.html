@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditya Kumar — Researcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #06080d;
+    --bg-section: #0a0e17;
+    --text: #e2e8f0;
+    --text-dim: #7a8ba7;
+    --accent: #00e5ff;
+    --accent-glow: rgba(0, 229, 255, 0.15);
+    --accent2: #7b61ff;
+    --accent2-glow: rgba(123, 97, 255, 0.12);
+    --border: rgba(255,255,255,0.06);
+    --card-bg: rgba(255,255,255,0.02);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #neural-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-name {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 300;
+    color: var(--text-dim);
+    margin-top: 16px;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+
+  .scroll-hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: pulse-line 2s infinite;
+  }
+
+  @keyframes pulse-line {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.4s;
+    background: transparent;
+  }
+
+  nav.scrolled {
+    background: rgba(6, 8, 13, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    padding: 120px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 40px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+
+  /* fade-in on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .about-photo {
+    width: 240px;
+    height: 300px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .about-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .about-photo .photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .about-photo .photo-placeholder span {
+    font-size: 2rem;
+    opacity: 0.3;
+  }
+
+  .about-text { font-weight: 300; color: var(--text-dim); font-size: 1.05rem; }
+  .about-text p + p { margin-top: 20px; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.4s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--accent-glow);
+    transform: translateY(-4px);
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── PUBLICATIONS ── */
+  .pub-list { display: flex; flex-direction: column; gap: 20px; }
+
+  .pub-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 28px;
+    align-items: center;
+    transition: all 0.4s;
+    cursor: default;
+  }
+
+  .pub-card:hover {
+    border-color: var(--accent2);
+    box-shadow: 0 0 40px var(--accent2-glow);
+    transform: translateX(6px);
+  }
+
+  .pub-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 2px;
+  }
+
+  .pub-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+
+  .pub-authors {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .pub-venue {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  .pub-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+  }
+
+  .pub-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+  }
+
+  /* ── CV ── */
+  .timeline { position: relative; padding-left: 40px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 48px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -44px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  .timeline-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .timeline-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .timeline-place {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .timeline-desc {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .cv-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+    padding: 14px 28px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+
+  .cv-download:hover {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+
+  /* ── CONTACT ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .contact-text {
+    font-weight: 300;
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 25px var(--accent-glow);
+    transform: translateX(6px);
+  }
+
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--accent-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .contact-value { font-weight: 400; font-size: 0.95rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 60px 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .about-photo { width: 180px; height: 225px; margin: 0 auto; }
+    section { padding: 80px 24px; }
+    nav { padding: 16px 20px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 0.6rem; }
+    .pub-card { grid-template-columns: 1fr; gap: 12px; }
+    .pub-year { writing-mode: horizontal-tb; }
+    .pub-link { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">AK</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="neural-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-tag">Machine Learning &bull; PhD Student at CMU</p>
+    <h1 class="hero-name">Aditya Kumar</h1>
+    <p class="hero-sub">PhD Student in Machine Learning at CMU</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">01 — About</p>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-photo reveal">
+      <!-- REPLACE: swap the placeholder div below with <img src="your-photo.jpg" alt="Aditya Kumar"> -->
+      <div class="photo-placeholder">
+        <span>AK</span>
+        Photo coming soon
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <p>I'm an incoming PhD student in Machine Learning at Carnegie Mellon University, advised by <a href="https://www.cs.cmu.edu/~wcohen/" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent)" target="_blank">William Cohen</a>. My research interests lie at the intersection of deep learning and [your area here] — I'm excited to explore what's possible.</p>
+      <p>When I'm not reading papers or writing code, you'll find me exploring new cities, tinkering with generative art, or getting unreasonably competitive at board games.</p>
+    </div>
+    <!-- UNCOMMENT WHEN READY:
+    <div class="about-stats reveal">
+      <div class="stat-card">
+        <div class="stat-number">12+</div>
+        <div class="stat-label">Publications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Best Paper Awards</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Citations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">8</div>
+        <div class="stat-label">Invited Talks</div>
+      </div>
+    </div>
+    -->
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="reveal">
+    <p class="section-label">02 — Publications</p>
+    <h2 class="section-title">Selected Works</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="pub-list">
+    <div class="pub-card reveal">
+      <div class="pub-year">2025</div>
+      <div class="pub-info">
+        <h3>Your Paper Title Here</h3>
+        <p class="pub-authors"><strong>A. Kumar</strong>, Co-Author Name</p>
+        <p class="pub-venue">Venue / Conference 2025</p>
+      </div>
+      <a href="#" class="pub-link" title="View paper">↗</a>
+    </div>
+    <div class="pub-card reveal">
+      <div class="pub-year">2024</div>
+      <div class="pub-info">
+        <h3>Your Other Paper Title Here</h3>
+        <p class="pub-authors"><strong>A. Kumar</strong>, Co-Author Name</p>
+        <p class="pub-venue">Venue / Conference 2024</p>
+      </div>
+      <a href="#" class="pub-link" title="View paper">↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- CV -->
+<section id="cv">
+  <div class="reveal">
+    <p class="section-label">03 — Curriculum Vitae</p>
+    <h2 class="section-title">My Journey</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2026 — Present</div>
+      <div class="timeline-title">PhD in Machine Learning</div>
+      <div class="timeline-place">Carnegie Mellon University</div>
+      <div class="timeline-desc">Advised by <a href="https://www.cs.cmu.edu/~wcohen/" style="color:var(--accent);text-decoration:none" target="_blank">William Cohen</a>. Research focus on [your area here].</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2024 — 2026</div>
+      <div class="timeline-title">M.S. in Artificial Intelligence and Innovation</div>
+      <div class="timeline-place">Carnegie Mellon University</div>
+      <div class="timeline-desc">Specialized in AI research and applied innovation.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2020 — 2024</div>
+      <div class="timeline-title">B.Tech in Engineering Physics (Silver Medal)</div>
+      <div class="timeline-place">IIT Madras</div>
+      <div class="timeline-desc">Thesis on deep learning methods in computational fluid dynamics. Minor in Computing.</div>
+    </div>
+    <!-- ADD MORE ENTRIES HERE — internships, research stints, etc. -->
+  </div>
+  <a href="#" class="cv-download reveal">↓ Download Full CV</a>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">04 — Contact</p>
+    <h2 class="section-title">Get in Touch</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-text reveal">
+      <p>I'm always happy to chat about research collaborations, speaking opportunities, or just interesting ideas. Drop me a line and I'll get back to you as soon as I can.</p>
+    </div>
+    <div class="contact-links reveal">
+      <a href="mailto:akumar@cs.cmu.edu" class="contact-link">
+        <div class="contact-icon">✉</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">akumar@cs.cmu.edu</div>
+        </div>
+      </a>
+      <a href="https://scholar.google.com" class="contact-link" target="_blank">
+        <div class="contact-icon">🎓</div>
+        <div>
+          <div class="contact-label">Google Scholar</div>
+          <div class="contact-value">View Profile</div>
+        </div>
+      </a>
+      <a href="https://github.com" class="contact-link" target="_blank">
+        <div class="contact-icon">⌨</div>
+        <div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value">github.com/adityakumar</div>
+        </div>
+      </a>
+      <a href="https://twitter.com" class="contact-link" target="_blank">
+        <div class="contact-icon">𝕏</div>
+        <div>
+          <div class="contact-label">Twitter / X</div>
+          <div class="contact-value">@adityakumar_ai</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Aditya Kumar &mdash; Built with curiosity and caffeine
+</footer>
+
+<script>
+// ═══════════════════════════════════════
+// INTERACTIVE NEURAL NETWORK ANIMATION
+// ═══════════════════════════════════════
+(() => {
+  const canvas = document.getElementById('neural-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  let scrollY = 0;
+  let mouseX = 0, mouseY = 0;
+  let targetMouseX = 0, targetMouseY = 0;
+
+  function resize() {
+    const hero = document.getElementById('hero');
+    W = canvas.width = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ── Nodes ──
+  const NODE_COUNT = 90;
+  const CONNECTION_DIST = 180;
+  const MOUSE_RADIUS = 250;
+
+  class Node {
+    constructor() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.baseX = this.x;
+      this.baseY = this.y;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.radius = Math.random() * 2.5 + 1;
+      this.layer = Math.floor(Math.random() * 3); // 0=deep, 1=mid, 2=front
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = 0.01 + Math.random() * 0.02;
+    }
+
+    update(time) {
+      // Scroll influence: parallax layers
+      const scrollFactor = [0.15, 0.3, 0.5][this.layer];
+      const scrollOffset = scrollY * scrollFactor;
+
+      // Ambient movement
+      this.baseX += this.vx;
+      this.baseY += this.vy;
+
+      // Bounce off edges
+      if (this.baseX < -50 || this.baseX > W + 50) this.vx *= -1;
+      if (this.baseY < -50 || this.baseY > H + 50) this.vy *= -1;
+
+      // Mouse repulsion/attraction
+      const dx = this.baseX - mouseX;
+      const dy = (this.baseY - scrollOffset) - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < MOUSE_RADIUS && dist > 0) {
+        const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+        const angle = Math.atan2(dy, dx);
+        // Gentle attraction toward mouse with slight orbit
+        this.x = this.baseX - Math.cos(angle + time * 0.001) * force * 30;
+        this.y = this.baseY - scrollOffset - Math.sin(angle + time * 0.001) * force * 30;
+      } else {
+        this.x = this.baseX;
+        this.y = this.baseY - scrollOffset;
+      }
+
+      // Pulse
+      this.pulsePhase += this.pulseSpeed;
+      this.currentRadius = this.radius + Math.sin(this.pulsePhase) * 0.8;
+    }
+  }
+
+  const nodes = Array.from({ length: NODE_COUNT }, () => new Node());
+
+  // ── Signal Pulses (travel along connections) ──
+  const pulses = [];
+
+  function spawnPulse() {
+    if (pulses.length > 15) return;
+    const i = Math.floor(Math.random() * nodes.length);
+    const j = Math.floor(Math.random() * nodes.length);
+    if (i === j) return;
+    const dx = nodes[i].x - nodes[j].x;
+    const dy = nodes[i].y - nodes[j].y;
+    if (Math.sqrt(dx * dx + dy * dy) < CONNECTION_DIST * 1.2) {
+      pulses.push({ from: i, to: j, t: 0, speed: 0.008 + Math.random() * 0.012 });
+    }
+  }
+
+  // ── Draw ──
+  function draw(time) {
+    ctx.clearRect(0, 0, W, H);
+
+    // Background radial glow
+    const gradient = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.6);
+    gradient.addColorStop(0, 'rgba(0, 229, 255, 0.03)');
+    gradient.addColorStop(0.5, 'rgba(123, 97, 255, 0.015)');
+    gradient.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, W, H);
+
+    // Smooth mouse
+    mouseX += (targetMouseX - mouseX) * 0.08;
+    mouseY += (targetMouseY - mouseY) * 0.08;
+
+    // Update nodes
+    nodes.forEach(n => n.update(time));
+
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECTION_DIST) {
+          const alpha = (1 - dist / CONNECTION_DIST) * 0.2;
+          // Color based on layer mix
+          const layerMix = (a.layer + b.layer) / 4;
+          const r = Math.round(0 + layerMix * 123);
+          const g = Math.round(229 - layerMix * 132);
+          const bl = Math.round(255);
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(${r},${g},${bl},${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw signal pulses
+    for (let p = pulses.length - 1; p >= 0; p--) {
+      const pulse = pulses[p];
+      pulse.t += pulse.speed;
+      if (pulse.t >= 1) { pulses.splice(p, 1); continue; }
+      const a = nodes[pulse.from], b = nodes[pulse.to];
+      const px = a.x + (b.x - a.x) * pulse.t;
+      const py = a.y + (b.y - a.y) * pulse.t;
+      const glow = ctx.createRadialGradient(px, py, 0, px, py, 8);
+      glow.addColorStop(0, `rgba(0, 229, 255, ${0.8 * (1 - pulse.t)})`);
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(px - 8, py - 8, 16, 16);
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      // Glow
+      const glowSize = n.currentRadius * 6;
+      const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowSize);
+      const layerAlpha = [0.08, 0.12, 0.18][n.layer];
+      glow.addColorStop(0, `rgba(0, 229, 255, ${layerAlpha})`);
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(n.x - glowSize, n.y - glowSize, glowSize * 2, glowSize * 2);
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.currentRadius, 0, Math.PI * 2);
+      const coreAlpha = [0.4, 0.6, 0.9][n.layer];
+      ctx.fillStyle = `rgba(200, 240, 255, ${coreAlpha})`;
+      ctx.fill();
+    });
+
+    // Spawn pulses occasionally
+    if (Math.random() < 0.05) spawnPulse();
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+
+  // ── Events ──
+  document.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    targetMouseX = e.clientX - rect.left;
+    targetMouseY = e.clientY - rect.top;
+  });
+
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+  });
+})();
+
+// ═══════════════════════════════════════
+// NAV SCROLL EFFECT
+// ═══════════════════════════════════════
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ═══════════════════════════════════════
+// REVEAL ON SCROLL
+// ═══════════════════════════════════════
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
