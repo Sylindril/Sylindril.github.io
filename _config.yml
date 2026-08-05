@@ -11,12 +11,12 @@ contact_note: >
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Aditya Kumar works on agents, reinforcement learning, interpretability, and scientific discovery at Carnegie Mellon University.
 footer_text: >
-  Built with <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> and <a href="https://github.com/alshedivat/al-folio" target="_blank">al-folio</a>. Hosted on Netlify.
+  Built with <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> and <a href="https://github.com/alshedivat/al-folio" target="_blank">al-folio</a>. Hosted on GitHub Pages.
 keywords: agents, reinforcement learning, interpretability, scientific discovery, Carnegie Mellon University
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: A # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
-url: https://sylindril.github.io # the canonical hostname; Netlify may attach a custom domain to it
+url: https://sylindril.github.io # the canonical hostname
 baseurl: # the site is served from the domain root
 last_updated: false # set to true if you want to display last updated in the footer
 impressum_path: # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
@@ -220,7 +220,6 @@ exclude:
   - lighthouse_results/
   - package.json
   - package-lock.json
-  - netlify.toml
   - .al-folio-overrides.yml
   - purgecss.config.js
   - README.md
@@ -418,7 +417,7 @@ external_links:
 # MAKE SURE imagemagick is installed and on your PATH before enabling imagemagick. In a terminal, run:
 #   convert -version
 imagemagick:
-  enabled: false # keeps Netlify builds self-contained; the profile image is already web-sized
+  enabled: false # keeps production builds self-contained; the profile image is already web-sized
   widths:
     - 480
     - 800

@@ -2,7 +2,7 @@
 
 Aditya's personal site and blog, built with the official
 [al-folio](https://github.com/alshedivat/al-folio) v1.1 starter and deployed
-on Netlify.
+on GitHub Pages.
 
 ## Run locally
 
@@ -39,8 +39,8 @@ Posts categorized as `literary` appear at `/literary/`; posts categorized as
 
 ## Deploy
 
-Connect this repository to Netlify. [`netlify.toml`](./netlify.toml) pins the
-Ruby version, builds the Jekyll site, and publishes `_site/`.
+Push to `main`. The GitHub Actions workflow in
+`.github/workflows/deploy-pages.yml` builds the site and publishes `_site/` to
+GitHub Pages.
 
-The current profile image is the public avatar from Aditya's GitHub account.
-Replace `assets/img/prof_pic.jpeg` with a preferred headshot at any time.
+Replace `assets/img/prof_pic.jpeg` with a new headshot at any time.
