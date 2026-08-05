@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet
+  version="1.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+>
+  <xsl:output method="html" encoding="UTF-8" />
+
+  <xsl:template match="/">
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title><xsl:value-of select="atom:feed/atom:title" /> — RSS feed</title>
+        <style>
+          :root { color-scheme: light dark; --background: #ffffff; --foreground: #2b2b2b; --muted: #6b7280; --accent: #2698ba; --border: #d8dee4; }
+          @media (prefers-color-scheme: dark) { :root { --background: #1c1c1d; --foreground: #e8e8e8; --muted: #a7adb5; --accent: #56c8e8; --border: #404349; } }
+          * { box-sizing: border-box; }
+          body { margin: 0; background: var(--background); color: var(--foreground); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; }
+          main { width: min(760px, calc(100% - 2rem)); margin: 0 auto; padding: 4rem 0; }
+          h1 { margin-bottom: 0.25rem; font-size: clamp(2rem, 7vw, 3.5rem); color: var(--accent); }
+          .intro { margin: 0 0 3rem; color: var(--muted); }
+          a { color: var(--accent); text-decoration-thickness: 0.08em; text-underline-offset: 0.15em; }
+          article { padding: 1.5rem 0; border-top: 1px solid var(--border); }
+          h2 { margin: 0 0 0.25rem; font-size: 1.35rem; }
+          time { color: var(--muted); font-size: 0.9rem; }
+          article p { margin-bottom: 0; }
+          code { padding: 0.15rem 0.35rem; border-radius: 0.25rem; background: color-mix(in srgb, var(--foreground) 9%, transparent); }
+        </style>
+      </head>
+      <body>
+        <main>
+          <h1><xsl:value-of select="atom:feed/atom:title" /></h1>
+          <p class="intro">
+            This is Aditya Kumar's RSS feed. Subscribe by copying
+            <code>https://sylindril.github.io/feed.xml</code> into a feed reader,
+            or <a href="https://sylindril.github.io/">return to the website</a>.
+          </p>
+
+          <xsl:for-each select="atom:feed/atom:entry">
+            <article>
+              <h2>
+                <a>
+                  <xsl:attribute name="href"><xsl:value-of select="atom:link[@rel='alternate']/@href" /></xsl:attribute>
+                  <xsl:value-of select="atom:title" />
+                </a>
+              </h2>
+              <time><xsl:value-of select="substring(atom:published, 1, 10)" /></time>
+              <p><xsl:value-of select="atom:summary" /></p>
+            </article>
+          </xsl:for-each>
+        </main>
+      </body>
+    </html>
+  </xsl:template>
+</xsl:stylesheet>

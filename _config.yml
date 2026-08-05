@@ -2,10 +2,13 @@
 # Site settings
 # -----------------------------------------------------------------------------
 
-title: blank # keep blank so al-folio uses the full name in the navbar
+title: Aditya Kumar
 first_name: Aditya
 middle_name:
 last_name: Kumar
+author:
+  name: Aditya Kumar
+  email: adityaku@andrew.cmu.edu
 contact_note: >
   Email is the best way to reach me.
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
