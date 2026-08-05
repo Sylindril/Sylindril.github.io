@@ -1,0 +1,9 @@
+# Social links are rendered in this order on the about page.
+email: adityaku@andrew.cmu.edu
+custom_social:
+  logo: fa-solid fa-file-lines
+  title: CV
+  url: /cv/
+github_username: Sylindril
+scholar_userid: sfgpP8UAAAAJ
+x_username: Adi_k_17

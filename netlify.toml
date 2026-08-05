@@ -1,0 +1,27 @@
+[build]
+  command = "bundle exec jekyll build"
+  publish = "_site"
+
+[build.environment]
+  BUNDLER_VERSION = "4.0.6"
+  JEKYLL_ENV = "production"
+  RUBY_VERSION = "3.3.5"
+  TZ = "America/New_York"
+
+[build.processing]
+  skip_processing = true
+
+[[headers]]
+  for = "/*"
+
+  [headers.values]
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+
+[[headers]]
+  for = "/assets/*"
+
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
